@@ -168,9 +168,8 @@ class MigrationsTest extends WebTestCase
      */
     public function provideAvailableVersions(): array
     {
-        $files = glob(__DIR__ . '/../../src/Migrations/Version*.php');
+        $files = glob(__DIR__ . '/../../../src/Migrations/Version*.php');
         $this->assertIsArray($files);
-        $this->assertGreaterThanOrEqual(3, $files);
         asort($files);
         $versions = [];
 
