@@ -1,0 +1,19 @@
+language: php
+
+php:
+  - 7.2
+  - 7.3
+
+env:
+  - INSTALL=install-lowest
+  - INSTALL=install-latest
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+install:
+  make ${INSTALL}
+
+script:
+  make test

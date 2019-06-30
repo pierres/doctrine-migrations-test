@@ -1,0 +1,10 @@
+includes:
+	- vendor/phpstan/phpstan-phpunit/extension.neon
+	- vendor/phpstan/phpstan-phpunit/rules.neon
+	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
+parameters:
+	level: max
+	paths:
+	    - .
+	excludes_analyse:
+		- vendor
