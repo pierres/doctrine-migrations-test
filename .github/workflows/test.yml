@@ -1,0 +1,17 @@
+name: test
+
+on:
+  push:
+  schedule:
+    - cron: '0 0 */1 * *'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        install: [install-lowest, install-latest]
+    steps:
+      - uses: actions/checkout@master
+      - run: make ${{ matrix.install }}
+      - run: make test

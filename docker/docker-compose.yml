@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+  php:
+    build: php
+    working_dir: /app
+    environment:
+      - HOME=/tmp
+    user: "${UID}:${GID}"
+    volumes:
+      - ../:/app
+    tmpfs:
+      - /tmp
