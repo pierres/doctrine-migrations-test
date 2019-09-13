@@ -6,12 +6,19 @@ on:
     - cron: '0 0 */1 * *'
 
 jobs:
-  update:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        install: [install-lowest, install-latest]
+        package-version: [lowest, latest]
+        php-version: [7.2, 7.3]
+    name: PHP ${{ matrix.php-version }} with ${{ matrix.package-version }} packages
     steps:
       - uses: actions/checkout@master
-      - run: make ${{ matrix.install }}
+      - name: Install PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+      - name: Install packages
+        run: make install-${{ matrix.package-version }}
       - run: make test
