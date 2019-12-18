@@ -19,6 +19,7 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-version }}
+          extensions: mbstring
       - name: Install packages
         run: make install-${{ matrix.package-version }}
       - run: make test
