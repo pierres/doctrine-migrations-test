@@ -31,6 +31,7 @@ class MigrationsTest extends WebTestCase
     {
         $container = static::getClient()->getContainer();
         static::assertNotNull($container);
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.orm.entity_manager');
         static::assertInstanceOf(EntityManagerInterface::class, $entityManager);
         return $entityManager;
@@ -95,7 +96,7 @@ class MigrationsTest extends WebTestCase
         ]));
     }
 
-    public function testAllMigrationsUp()
+    public function testAllMigrationsUp(): void
     {
         $this->migrateDatabase('latest');
         $this->validateDatabase();
@@ -104,7 +105,7 @@ class MigrationsTest extends WebTestCase
     /**
      * @param string $version
      */
-    private function migrateDatabase(string $version)
+    private function migrateDatabase(string $version): void
     {
         $this->runCommand(new ArrayInput([
             'command' => 'doctrine:migrations:migrate',
@@ -113,14 +114,14 @@ class MigrationsTest extends WebTestCase
         ]));
     }
 
-    private function validateDatabase()
+    private function validateDatabase(): void
     {
         $this->runCommand(new ArrayInput([
             'command' => 'doctrine:schema:validate'
         ]));
     }
 
-    public function testAllMigrationsDown()
+    public function testAllMigrationsDown(): void
     {
         $this->createDatabaseSchema();
         $this->validateDatabase();
@@ -140,7 +141,7 @@ class MigrationsTest extends WebTestCase
         ]));
     }
 
-    private function addAllMigrationVersions()
+    private function addAllMigrationVersions(): void
     {
         $this->runCommand(new ArrayInput([
             'command' => 'doctrine:migrations:version',
@@ -154,7 +155,7 @@ class MigrationsTest extends WebTestCase
      * @param string $version
      * @dataProvider provideAvailableVersions
      */
-    public function testMigration(string $version)
+    public function testMigration(string $version): void
     {
         $this->migrateDatabase($version);
         static::$client = static::recreateClient();
@@ -181,7 +182,7 @@ class MigrationsTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return array<array>
      */
     public function provideAvailableVersions(): array
     {

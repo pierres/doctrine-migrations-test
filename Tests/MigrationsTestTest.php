@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class MigrationsTestTest extends TestCase
 {
-    public function testInstanciation()
+    public function testInstantiation(): void
     {
         $this->assertInstanceOf(MigrationsTest::class, new MigrationsTest());
     }
