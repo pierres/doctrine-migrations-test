@@ -3,6 +3,5 @@
     <file>.</file>
     <exclude-pattern>/vendor/*</exclude-pattern>
     <exclude-pattern>/coverage/*</exclude-pattern>
-    <rule ref="PSR1"/>
-    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
 </ruleset>
