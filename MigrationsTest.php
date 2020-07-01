@@ -107,11 +107,13 @@ class MigrationsTest extends WebTestCase
      */
     private function migrateDatabase(string $version): void
     {
-        $this->runCommand(new ArrayInput([
+        $i = new ArrayInput([
             'command' => 'doctrine:migrations:migrate',
-            'version' => $version,
-            '--no-interaction' => true
-        ]));
+            '--allow-no-migration' => true,
+            '--no-interaction' => true,
+            'version' => $version
+        ]);
+        $this->runCommand($i);
     }
 
     private function validateDatabase(): void
@@ -124,6 +126,7 @@ class MigrationsTest extends WebTestCase
     public function testAllMigrationsDown(): void
     {
         $this->createDatabaseSchema();
+        $this->syncMetadataStorage();
         $this->validateDatabase();
         $this->addAllMigrationVersions();
         $this->migrateDatabase('first');
@@ -147,6 +150,14 @@ class MigrationsTest extends WebTestCase
             'command' => 'doctrine:migrations:version',
             '--add' => true,
             '--all' => true,
+            '--no-interaction' => true
+        ]));
+    }
+
+    private function syncMetadataStorage(): void
+    {
+        $this->runCommand(new ArrayInput([
+            'command' => 'doctrine:migrations:sync-metadata-storage',
             '--no-interaction' => true
         ]));
     }
@@ -186,13 +197,13 @@ class MigrationsTest extends WebTestCase
      */
     public function provideAvailableVersions(): array
     {
-        $files = glob(__DIR__ . '/../../../src/Migrations/Version*.php');
+        $files = glob(__DIR__ . '/../../../src/Migrations/*.php');
         $this->assertIsArray($files);
         asort($files);
         $versions = [];
 
         foreach ($files as $file) {
-            $versions[] = [preg_replace('/^.*Version(\d+)\.php$/', '$1', $file)];
+            $versions[] = [preg_replace('#^/.+/([^/]+)\.php$#', 'DoctrineMigrations\\\$1', $file)];
         }
 
         return $versions;
