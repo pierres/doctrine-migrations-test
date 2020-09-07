@@ -8,3 +8,4 @@ parameters:
 	    - .
 	excludes_analyse:
 		- vendor
+	checkGenericClassInNonGenericObjectType: false

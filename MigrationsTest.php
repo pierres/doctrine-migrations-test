@@ -16,7 +16,7 @@ class MigrationsTest extends WebTestCase
     protected static $client;
 
     /**
-     * @param string $className
+     * @param class-string<mixed> $className
      * @return ObjectRepository
      */
     protected static function getRepository(string $className): ObjectRepository
