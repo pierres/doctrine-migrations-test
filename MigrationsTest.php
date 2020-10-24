@@ -130,10 +130,9 @@ class MigrationsTest extends WebTestCase
         $this->validateDatabase();
         $this->addAllMigrationVersions();
         $this->migrateDatabase('first');
-        $this->assertEquals(
-            ['migration_versions'],
-            $this->getEntityManager()->getConnection()->getSchemaManager()->listTableNames()
-        );
+        $knownTables = $this->getEntityManager()->getConnection()->getSchemaManager()->listTableNames();
+        $this->assertCount(1, $knownTables);
+        $this->assertTrue($knownTables == ['doctrine_migration_versions'] || $knownTables == ['migration_versions']);
     }
 
     protected static function createDatabaseSchema(): void
@@ -197,7 +196,11 @@ class MigrationsTest extends WebTestCase
      */
     public function provideAvailableVersions(): array
     {
-        $files = glob(__DIR__ . '/../../../src/Migrations/*.php');
+        if (is_dir(__DIR__ . '/../../../migrations')) {
+            $files = glob(__DIR__ . '/../../../migrations/*.php');
+        } else {
+            $files = glob(__DIR__ . '/../../../src/Migrations/*.php');
+        }
         $this->assertIsArray($files);
         asort($files);
         $versions = [];
