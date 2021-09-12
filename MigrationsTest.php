@@ -12,21 +12,16 @@ use Symfony\Component\Console\Output\BufferedOutput;
 
 class MigrationsTest extends WebTestCase
 {
-    /** @var KernelBrowser */
-    protected static $client;
+    protected static KernelBrowser $client;
 
     /**
-     * @param class-string<mixed> $className
-     * @return ObjectRepository
+     * @param class-string $className
      */
     protected static function getRepository(string $className): ObjectRepository
     {
         return static::getEntityManager()->getRepository($className);
     }
 
-    /**
-     * @return EntityManagerInterface
-     */
     protected static function getEntityManager(): EntityManagerInterface
     {
         $container = static::getClient()->getContainer();
@@ -37,9 +32,6 @@ class MigrationsTest extends WebTestCase
         return $entityManager;
     }
 
-    /**
-     * @return KernelBrowser
-     */
     protected static function getClient(): KernelBrowser
     {
         return static::$client;
@@ -54,9 +46,6 @@ class MigrationsTest extends WebTestCase
         }
     }
 
-    /**
-     * @return bool
-     */
     protected static function isPersistentDatabase(): bool
     {
         $params = static::getEntityManager()->getConnection()->getParams();
@@ -73,9 +62,6 @@ class MigrationsTest extends WebTestCase
         ]));
     }
 
-    /**
-     * @param ArrayInput $input
-     */
     protected static function runCommand(ArrayInput $input): void
     {
         $application = new Application(static::getClient()->getKernel());
@@ -102,9 +88,6 @@ class MigrationsTest extends WebTestCase
         $this->validateDatabase();
     }
 
-    /**
-     * @param string $version
-     */
     private function migrateDatabase(string $version): void
     {
         $i = new ArrayInput([
@@ -162,7 +145,6 @@ class MigrationsTest extends WebTestCase
     }
 
     /**
-     * @param string $version
      * @dataProvider provideAvailableVersions
      */
     public function testMigration(string $version): void
@@ -174,9 +156,6 @@ class MigrationsTest extends WebTestCase
         $this->migrateDatabase('next');
     }
 
-    /**
-     * @return KernelBrowser
-     */
     private static function recreateClient(): KernelBrowser
     {
         static::shutdownKernel();
@@ -191,9 +170,6 @@ class MigrationsTest extends WebTestCase
         }
     }
 
-    /**
-     * @return array<array>
-     */
     public function provideAvailableVersions(): array
     {
         if (is_dir(__DIR__ . '/../../../migrations')) {
