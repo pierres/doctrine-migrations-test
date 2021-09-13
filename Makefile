@@ -3,10 +3,10 @@
 COMPOSER=composer --no-interaction
 
 install-latest:
-	${COMPOSER} update --prefer-stable
+	${COMPOSER} update --prefer-stable --ignore-platform-reqs
 
 install-lowest:
-	${COMPOSER} update --prefer-lowest
+	${COMPOSER} update --prefer-lowest --ignore-platform-reqs
 
 test:
 	${COMPOSER} validate --strict --no-check-lock
