@@ -113,7 +113,7 @@ class MigrationsTest extends WebTestCase
         $this->validateDatabase();
         $this->addAllMigrationVersions();
         $this->migrateDatabase('first');
-        $knownTables = $this->getEntityManager()->getConnection()->getSchemaManager()->listTableNames();
+        $knownTables = $this->getEntityManager()->getConnection()->createSchemaManager()->listTableNames();
         $this->assertCount(1, $knownTables);
         $this->assertTrue($knownTables == ['doctrine_migration_versions'] || $knownTables == ['migration_versions']);
     }
