@@ -150,16 +150,16 @@ class MigrationsTest extends WebTestCase
     public function testMigration(string $version): void
     {
         $this->migrateDatabase($version);
-        static::$client = static::recreateClient();
+        self::$client = self::recreateClient();
         $this->migrateDatabase('prev');
-        static::$client = static::recreateClient();
+        self::$client = self::recreateClient();
         $this->migrateDatabase('next');
     }
 
     private static function recreateClient(): KernelBrowser
     {
-        static::shutdownKernel();
-        return static::createClient();
+        self::shutdownKernel();
+        return self::createClient();
     }
 
     private static function shutdownKernel(): void
@@ -193,7 +193,7 @@ class MigrationsTest extends WebTestCase
         if (static::isPersistentDatabase()) {
             static::dropDatabase();
         }
-        static::shutdownKernel();
+        self::shutdownKernel();
         parent::tearDown();
     }
 }
