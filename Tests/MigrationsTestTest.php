@@ -9,6 +9,6 @@ class MigrationsTestTest extends TestCase
 {
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(MigrationsTest::class, new MigrationsTest());
+        $this->assertInstanceOf(MigrationsTest::class, new MigrationsTest(MigrationsTest::class));
     }
 }

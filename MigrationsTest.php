@@ -4,6 +4,7 @@ namespace DoctrineMigrationsTest;
 
 use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -144,9 +145,7 @@ class MigrationsTest extends WebTestCase
         ]));
     }
 
-    /**
-     * @dataProvider provideAvailableVersions
-     */
+    #[DataProvider('provideAvailableVersions')]
     public function testMigration(string $version): void
     {
         $this->migrateDatabase($version);
@@ -170,14 +169,14 @@ class MigrationsTest extends WebTestCase
         }
     }
 
-    public function provideAvailableVersions(): array
+    public static function provideAvailableVersions(): array
     {
         if (is_dir(__DIR__ . '/../../../migrations')) {
             $files = glob(__DIR__ . '/../../../migrations/*.php');
         } else {
             $files = glob(__DIR__ . '/../../../src/Migrations/*.php');
         }
-        $this->assertIsArray($files);
+        static::assertIsArray($files);
         asort($files);
         $versions = [];
 
