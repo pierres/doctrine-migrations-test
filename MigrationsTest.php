@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -33,9 +34,9 @@ class MigrationsTest extends WebTestCase
         return $entityManager;
     }
 
-    protected static function getClient(): KernelBrowser
+    protected static function getClient(AbstractBrowser $newClient = null): KernelBrowser
     {
-        return static::$client;
+        return $newClient instanceof KernelBrowser ? $newClient : static::$client;
     }
 
     public function setUp(): void
