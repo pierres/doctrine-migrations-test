@@ -14,12 +14,18 @@ jobs:
         php-version: [8.1, 8.2, 8.3]
     name: PHP ${{ matrix.php-version }} with ${{ matrix.package-version }} packages
     steps:
-      - uses: actions/checkout@master
+      - name: Install Just
+        uses: extractions/setup-just@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Install PHP
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring
+          coverage: none
       - name: Install packages
-        run: make install-${{ matrix.package-version }}
-      - run: make test
+        run: just install-${{ matrix.package-version }}
+      - run: just test
