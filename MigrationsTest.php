@@ -18,6 +18,11 @@ class MigrationsTest extends WebTestCase
 
     /**
      * @param class-string $className
+     *
+     * @psalm-param class-string<T> $className
+     * @psalm-return ObjectRepository<T>
+     * @template T of object
+     * @return ObjectRepository<T>
      */
     protected static function getRepository(string $className): ObjectRepository
     {
@@ -60,7 +65,7 @@ class MigrationsTest extends WebTestCase
             'command' => 'doctrine:database:drop',
             '--force' => true,
             '--if-exists' => true,
-            '--quiet' => true
+            '--quiet' => true,
         ]));
     }
 
@@ -80,7 +85,9 @@ class MigrationsTest extends WebTestCase
     protected static function createDatabase(): void
     {
         static::runCommand(new ArrayInput([
-            'command' => 'doctrine:database:create'
+            'command' => 'doctrine:database:create',
+            '--if-not-exists' => true,
+            '--quiet' => true,
         ]));
     }
 
@@ -104,7 +111,9 @@ class MigrationsTest extends WebTestCase
     private function validateDatabase(): void
     {
         $this->runCommand(new ArrayInput([
-            'command' => 'doctrine:schema:validate'
+            'command' => 'doctrine:migrations:diff',
+            '--allow-empty-diff' => true,
+            '--quiet' => true,
         ]));
     }
 
@@ -124,7 +133,7 @@ class MigrationsTest extends WebTestCase
     {
         static::runCommand(new ArrayInput([
             'command' => 'doctrine:schema:create',
-            '--quiet' => true
+            '--quiet' => true,
         ]));
     }
 
@@ -170,7 +179,10 @@ class MigrationsTest extends WebTestCase
         }
     }
 
-    public static function provideAvailableVersions(): array
+    /**
+     * @return iterable<string[]>
+     */
+    public static function provideAvailableVersions(): iterable
     {
         if (is_dir(__DIR__ . '/../../../migrations')) {
             $files = glob(__DIR__ . '/../../../migrations/*.php');
@@ -179,13 +191,12 @@ class MigrationsTest extends WebTestCase
         }
         static::assertIsArray($files);
         asort($files);
-        $versions = [];
 
         foreach ($files as $file) {
-            $versions[] = [preg_replace('#^/.+/([^/]+)\.php$#', 'DoctrineMigrations\\\$1', $file)];
+            $version = preg_replace('#^/.+/([^/]+)\.php$#', 'DoctrineMigrations\\\$1', $file);
+            static::assertIsString($version);
+            yield [$version];
         }
-
-        return $versions;
     }
 
     protected function tearDown(): void
