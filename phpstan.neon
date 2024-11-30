@@ -4,3 +4,8 @@ parameters:
 	    - .
 	excludePaths:
 		- vendor
+	reportUnmatchedIgnoredErrors: false
+	ignoreErrors:
+		-
+			identifier: generics.notGeneric
+			path: MigrationsTest.php

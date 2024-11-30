@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class MigrationsTest extends WebTestCase
 {
@@ -32,14 +34,15 @@ class MigrationsTest extends WebTestCase
     protected static function getEntityManager(): EntityManagerInterface
     {
         $container = static::getClient()->getContainer();
-        static::assertNotNull($container);
-        /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.orm.entity_manager');
         static::assertInstanceOf(EntityManagerInterface::class, $entityManager);
         return $entityManager;
     }
 
-    protected static function getClient(AbstractBrowser $newClient = null): KernelBrowser
+    /**
+     * @param AbstractBrowser<Request, Response>|null $newClient
+     */
+    protected static function getClient(?AbstractBrowser $newClient = null): KernelBrowser
     {
         return $newClient instanceof KernelBrowser ? $newClient : static::$client;
     }
