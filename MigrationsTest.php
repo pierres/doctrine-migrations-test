@@ -106,7 +106,8 @@ class MigrationsTest extends WebTestCase
             'command' => 'doctrine:migrations:migrate',
             '--allow-no-migration' => true,
             '--no-interaction' => true,
-            'version' => $version
+            '--quiet' => true,
+            'version' => $version,
         ]);
         $this->runCommand($i);
     }
@@ -146,7 +147,8 @@ class MigrationsTest extends WebTestCase
             'command' => 'doctrine:migrations:version',
             '--add' => true,
             '--all' => true,
-            '--no-interaction' => true
+            '--no-interaction' => true,
+            '--quiet' => true,
         ]));
     }
 
@@ -154,7 +156,8 @@ class MigrationsTest extends WebTestCase
     {
         $this->runCommand(new ArrayInput([
             'command' => 'doctrine:migrations:sync-metadata-storage',
-            '--no-interaction' => true
+            '--no-interaction' => true,
+            '--quiet' => true,
         ]));
     }
 
