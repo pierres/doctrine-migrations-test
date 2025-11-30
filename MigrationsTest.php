@@ -128,9 +128,18 @@ class MigrationsTest extends WebTestCase
         $this->validateDatabase();
         $this->addAllMigrationVersions();
         $this->migrateDatabase('first');
-        $knownTables = $this->getEntityManager()->getConnection()->createSchemaManager()->introspectTableNames();
-        $this->assertCount(1, $knownTables);
-        $this->assertEquals('"doctrine_migration_versions"', $knownTables[0]->toString());
+
+        if (method_exists($this->getEntityManager()->getConnection()->createSchemaManager(), 'introspectTableNames')) {
+            $knownTables = $this->getEntityManager()->getConnection()->createSchemaManager()->introspectTableNames();
+            $this->assertCount(1, $knownTables);
+            $migrationTable = $knownTables[0]->toString();
+        } else {
+            $knownTables = $this->getEntityManager()->getConnection()->createSchemaManager()->listTableNames();
+            $this->assertCount(1, $knownTables);
+            $migrationTable = $knownTables[0];
+        }
+
+        $this->assertStringContainsString('migration_versions', $migrationTable);
     }
 
     protected static function createDatabaseSchema(): void

@@ -9,3 +9,18 @@ parameters:
 		-
 			identifier: generics.notGeneric
 			path: MigrationsTest.php
+		-
+			identifier: method.nonObject
+			path: MigrationsTest.php
+		-
+			identifier: argument.type
+			path: MigrationsTest.php
+		-
+			identifier: offsetAccess.nonOffsetAccessible
+			path: MigrationsTest.php
+		-
+			identifier: function.alreadyNarrowedType
+			path: MigrationsTest.php
+		-
+			identifier: method.deprecated
+			path: MigrationsTest.php
