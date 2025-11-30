@@ -59,7 +59,7 @@ class MigrationsTest extends WebTestCase
     protected static function isPersistentDatabase(): bool
     {
         $params = static::getEntityManager()->getConnection()->getParams();
-        return !empty($params['path']) || !empty($params['dbname']);
+        return !empty($params['dbname']);
     }
 
     protected static function dropDatabase(): void
@@ -128,9 +128,9 @@ class MigrationsTest extends WebTestCase
         $this->validateDatabase();
         $this->addAllMigrationVersions();
         $this->migrateDatabase('first');
-        $knownTables = $this->getEntityManager()->getConnection()->createSchemaManager()->listTableNames();
+        $knownTables = $this->getEntityManager()->getConnection()->createSchemaManager()->introspectTableNames();
         $this->assertCount(1, $knownTables);
-        $this->assertTrue($knownTables == ['doctrine_migration_versions'] || $knownTables == ['migration_versions']);
+        $this->assertEquals('"doctrine_migration_versions"', $knownTables[0]->toString());
     }
 
     protected static function createDatabaseSchema(): void
